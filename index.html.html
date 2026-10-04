@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Iris Buljević — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #14140F;
+    --paper: #FFFFFF;
+    --line: rgba(20, 20, 15, 0.12);
+    --accent: #3A4A34;
+    --gray-block: #E5E2D8;
+    --gray-block-text: #8C8874;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Inter', -apple-system, sans-serif;
+    --gutter: clamp(20px, 5vw, 64px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; }
+
+  img, video { display: block; max-width: 100%; }
+
+  /* ---------- LOADING SCREEN ---------- */
+  body.loading { overflow: hidden; }
+
+  .loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.9s ease;
+  }
+
+  .loading-screen video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    cursor: pointer;
+  }
+
+  .loading-screen video.ready {
+    opacity: 1;
+  }
+
+  .loading-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ---------- NAV ---------- */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px var(--gutter);
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(6px);
+    z-index: 50;
+  }
+
+  .nav-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    letter-spacing: 0.01em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: clamp(16px, 3vw, 32px);
+    font-size: 14px;
+  }
+
+  .nav-links button {
+    position: relative;
+    padding-bottom: 3px;
+    background: none;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .nav-links button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: var(--ink);
+    transition: width 0.25s ease;
+  }
+
+  .nav-links button:hover::after,
+  .nav-links button.active::after {
+    width: 100%;
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* ---------- VIEWS ---------- */
+  .view-stack { position: relative; }
+
+  .view { display: none; }
+
+  /* Only the active view is ever shown. The old view disappears immediately
+     and the new one fades in, so nothing from a previous page can linger. */
+  .view.active {
+    display: block;
+    animation: fadein 0.45s ease backwards;
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Used specifically when opening a project, for a nicer "slide up" feel. */
+  .view.active.slide-in {
+    animation: slideInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  @keyframes slideInUp {
+    from { opacity: 0; transform: translateY(clamp(40px, 8vh, 90px)); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .view.active, .view.active.slide-in { animation: none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: clamp(16px, 3vh, 32px) var(--gutter) clamp(10px, 2vh, 20px);
+    margin-bottom: clamp(24px, 4vh, 56px);
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: clamp(20px, 4vw, 48px);
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--gray-block-text);
+    flex-shrink: 0;
+  }
+
+  .hero .hero-heading {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(18px, 2vw, 24px);
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    text-align: left;
+    max-width: 360px;
+  }
+
+  /* ---------- ABOUT INTRO (portrait + title/subtitle) ---------- */
+  .about-intro {
+    display: flex;
+    align-items: stretch;
+    gap: clamp(32px, 6vw, 96px);
+    padding: clamp(16px, 3vh, 32px) var(--gutter) 48px;
+    max-width: 1200px;
+  }
+
+  .about-portrait {
+    position: relative;
+    flex: 0 0 auto;
+    width: clamp(240px, 27vw, 380px);
+    aspect-ratio: 3 / 4;
+    align-self: flex-start;
+    background: var(--gray-block, #e9e8e3);
+    overflow: hidden;
+  }
+
+  .about-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+  }
+
+  .about-portrait span {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--gray-block-text);
+  }
+
+  .about-intro-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: clamp(16px, 2.5vh, 28px);
+  }
+
+  .about-intro-text h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(26px, 4vw, 50px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .about-intro-text p {
+    max-width: 58ch;
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(20, 20, 15, 0.78);
+  }
+
+  @media (max-width: 640px) {
+    .about-intro { flex-direction: column; gap: 28px; }
+    .about-portrait { width: 100%; }
+  }
+
+  .page-title {
+    padding: clamp(50px, 12vh, 120px) var(--gutter) 48px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(32px, 5vw, 56px);
+  }
+
+  /* ---------- WORK / ARCHIVE GRID ---------- */
+  .grid-section {
+    padding: 0 var(--gutter) clamp(60px, 10vh, 120px);
+  }
+
+  .project-grid {
+    --cols: 4;
+    --tile-gap: clamp(20px, 2.4vw, 40px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: var(--tile-gap);
+    row-gap: clamp(40px, 4vw, 60px);
+  }
+
+  .tile {
+    display: block;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0;
+    flex: 0 0 calc((100% - (var(--cols) - 1) * var(--tile-gap)) / var(--cols));
+    max-width: calc((100% - (var(--cols) - 1) * var(--tile-gap)) / var(--cols));
+  }
+
+  .tile-image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--gray-block);
+    box-shadow: 0 3px 10px rgba(20, 20, 15, 0.12);
+    border-radius: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-block-text);
+    font-size: 13px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    transition: border-radius 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Real media fills the placeholder box. If a src is missing/broken,
+     onerror hides the tag and the placeholder text behind it shows instead. */
+  .tile-image img,
+  .tile-image video,
+  .mini-tile-image img,
+  .mini-tile-image video,
+  .media-block img,
+  .media-block video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  button.tile { cursor: pointer; }
+
+  button.tile:hover .tile-image { border-radius: 14px; box-shadow: 0 6px 16px rgba(20, 20, 15, 0.16); }
+
+  .tile-title {
+    font-family: var(--serif);
+    font-size: 19px;
+    margin-bottom: 4px;
+  }
+
+  .tile-tag {
+    font-size: 13px;
+    color: var(--gray-block-text);
+  }
+
+  .tile.static { cursor: default; }
+
+  /* Archive tiles: no title/tag underneath, so use a horizontal (landscape) ratio */
+  #view-archive .tile-image {
+    aspect-ratio: 3 / 2;
+    margin-bottom: 0;
+  }
+
+  /* Archive grid: fixed 2-up layout so the horizontal images can sit bigger */
+  #view-archive .project-grid { --cols: 2; }
+
+  @media (max-width: 1100px) {
+    .project-grid { --cols: 3; }
+  }
+
+  @media (max-width: 780px) {
+    .project-grid { --cols: 2; }
+  }
+
+  @media (max-width: 480px) {
+    .project-grid { --cols: 1; }
+  }
+
+  /* ---------- PROJECT HEADER (detail view) ---------- */
+  .project-header {
+    padding: 0 var(--gutter) 48px;
+    max-width: 1100px;
+  }
+
+  .project-meta-line {
+    font-size: 13px;
+    color: var(--gray-block-text);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .project-meta-line .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gray-block-text);
+    display: inline-block;
+  }
+
+  .project-header h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(30px, 5vw, 52px);
+    line-height: 1.15;
+    max-width: 20ch;
+    margin-bottom: 22px;
+  }
+
+  .project-header p {
+    max-width: 58ch;
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(20, 20, 15, 0.78);
+  }
+
+  /* ---------- META ROW ---------- */
+  .meta-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    padding: 40px var(--gutter);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    max-width: 1100px;
+    margin: 0 auto 64px;
+  }
+
+  .meta-item .label {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+
+  .meta-item .value {
+    font-size: 15px;
+    color: rgba(20, 20, 15, 0.75);
+    line-height: 1.5;
+  }
+
+  /* ---------- PROJECT END LINK ---------- */
+  .project-link-end {
+    display: flex;
+    justify-content: center;
+    padding: clamp(24px, 4vh, 48px) 0 8px;
+  }
+
+  .project-link-end a {
+    display: inline-block;
+    padding: 14px 30px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .project-link-end a:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* "Request the font" button + inline form */
+  .project-link-end button.request-toggle {
+    display: inline-block;
+    padding: 14px 30px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    background: transparent;
+    font-family: var(--sans);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .project-link-end button.request-toggle:hover,
+  .project-link-end button.request-toggle[aria-expanded="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* CV request inside the About page: left-aligned like the text */
+  .about-cv .project-link-end { justify-content: flex-start; padding-top: 28px; }
+  .about-cv .font-request-panel { margin-left: 0; margin-right: 0; }
+
+  .font-request-panel {
+    max-width: 560px;
+    margin: 28px auto 0;
+    text-align: left;
+  }
+  .font-request-panel p.font-request-intro {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(20, 20, 15, 0.78);
+    margin-bottom: 20px;
+  }
+  .font-request-panel .field { display: flex; flex-direction: column; gap: 6px; }
+  .font-request-panel label { font-size: 13px; color: var(--gray-block-text); }
+  .font-request-panel input[type="text"],
+  .font-request-panel input[type="email"],
+  .font-request-panel textarea {
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 10px 0;
+    font-family: var(--sans);
+    font-size: 16px;
+    background: transparent;
+    color: var(--ink);
+    border-radius: 0;
+    resize: vertical;
+  }
+  .font-request-panel button[type="submit"] {
+    align-self: flex-start;
+    padding: 14px 28px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    font-family: var(--sans);
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .font-request-panel button[type="submit"]:disabled { opacity: 0.6; cursor: default; }
+
+  /* ---------- GALLERY (detail view) ---------- */
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2.5vw, 28px);
+    padding: 0 var(--gutter) clamp(90px, 14vh, 160px);
+  }
+
+  .media-block {
+    position: relative;
+    background: var(--gray-block);
+    box-shadow: 0 3px 10px rgba(20, 20, 15, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-block-text);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .media-block span { padding: 12px; }
+
+  .media-full { aspect-ratio: 16 / 9; max-width: 820px; margin: 0 auto; }
+  .media-wide { aspect-ratio: 3 / 2; }
+  .media-portrait { aspect-ratio: 4 / 5; }
+  .media-ultrawide { aspect-ratio: 2560 / 1080; max-width: 1100px; margin: 0 auto; }
+  .media-hero-wide { aspect-ratio: 2480 / 1145; }
+
+  .media-wide-solo {
+    max-width: calc(65% - clamp(16px, 2.5vw, 28px) / 2);
+    margin: 0 auto;
+}
+
+  .media-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2.5vw, 28px);
+  }
+
+  .media-row-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+  }
+
+  @media (max-width: 720px) {
+    .media-row { grid-template-columns: 1fr; }
+    .media-row-3 { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .media-row-3 { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- MORE PROJECTS ---------- */
+  .more-projects {
+    padding: 88px var(--gutter) 88px;
+  }
+
+  .more-projects .label {
+    font-size: 13px;
+    color: var(--gray-block-text);
+    margin-bottom: 20px;
+  }
+
+  .mini-carousel {
+    overflow: hidden;
+    touch-action: pan-y;
+    width: calc(100% + 2 * var(--gutter));
+    margin-left: calc(-1 * var(--gutter));
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+  }
+
+  .mini-project-grid {
+    display: flex;
+    gap: clamp(14px, 2vw, 24px);
+    width: max-content;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+    will-change: transform;
+  }
+
+  .mini-tile {
+    display: block;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0;
+    flex: 0 0 auto;
+    width: clamp(130px, 13vw, 190px);
+    cursor: pointer;
+  }
+
+  .mini-tile-image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--gray-block);
+    box-shadow: 0 3px 10px rgba(20, 20, 15, 0.12);
+    border-radius: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-block-text);
+    font-size: 11px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    transition: border-radius 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .mini-tile:hover .mini-tile-image { border-radius: 10px; box-shadow: 0 6px 16px rgba(20, 20, 15, 0.16); }
+
+  .mini-tile-title {
+    font-family: var(--serif);
+    font-size: 14px;
+  }
+
+  @media (max-width: 720px) {
+    .mini-tile { width: clamp(110px, 30vw, 150px); }
+  }
+
+  /* ---------- PREV / NEXT ---------- */
+  .prev-next {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--gutter) 48px;
+    font-size: 14px;
+    color: var(--gray-block-text);
+    width: 100%;
+  }
+
+  .prev-next button { background: none; border: none; color: inherit; cursor: pointer; }
+  .prev-next button:hover { color: var(--ink); }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    padding: 56px var(--gutter) 0;
+  }
+
+  .footer-top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+    padding-bottom: 48px;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 15px;
+  }
+
+  .footer-nav button { background: none; border: none; color: inherit; cursor: pointer; text-align: left; }
+
+  .footer-social {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 15px;
+  }
+
+  .footer-contact {
+    font-family: var(--serif);
+    font-size: clamp(20px, 3vw, 28px);
+  }
+
+  .footer-contact a:hover { text-decoration: underline; }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px var(--gutter);
+    margin: 0 calc(-1 * var(--gutter));
+    font-size: 12px;
+    color: var(--gray-block-text);
+  }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-toggle { display: block; }
+    .meta-row { grid-template-columns: 1fr; gap: 24px; }
+    .hero { flex-wrap: wrap; gap: 20px; }
+    .hero .hero-heading { max-width: 100%; }
+  }
+
+  /* ---------- ROBUSTNESS / MOBILE FIXES ---------- */
+  .view:not(.active) { display: none !important; }
+  .project-content[hidden] { display: none !important; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { overflow-x: hidden; }
+  .footer-bottom { flex-wrap: wrap; gap: 6px 16px; }
+  .footer-contact a { overflow-wrap: anywhere; }
+
+  .nav-links.open { display: flex; }
+
+  @media (max-width: 780px) {
+    .hero { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 640px) {
+    .nav { padding: 18px var(--gutter); }
+    .nav-name { font-size: 20px; }
+    .nav-toggle { padding: 8px 0 8px 12px; }
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      padding: 8px var(--gutter) 16px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      font-size: 16px;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links button { text-align: left; padding: 12px 0; }
+    .nav-links button::after { bottom: 8px; }
+    .media-wide-solo { max-width: 100%; }
+    .meta-row { margin-bottom: 40px; }
+    .project-header { padding-bottom: 32px; }
+    .more-projects { padding: 56px var(--gutter); }
+    .footer-top { gap: 24px; }
+    .footer-contact br { display: none; }
+    .project-link-end a { padding: 14px 24px; }
+    /* Photo archive: one full-width photo per row, shown uncropped */
+    #view-archive .page-title { padding-bottom: 24px; }
+    #view-archive .grid-section { padding-left: 12px; padding-right: 12px; }
+    #view-archive .project-grid { --cols: 1; row-gap: 14px; }
+    #view-archive .tile-image { aspect-ratio: auto; min-height: 220px; }
+    #view-archive .tile-image span {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #view-archive .tile-image img {
+      position: relative;
+      inset: auto;
+      z-index: 1;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  @media (hover: none) {
+    button.tile:hover .tile-image,
+    .mini-tile:hover .mini-tile-image { border-radius: 0; }
+  }
+</style>
+</head>
+<body class="loading">
+
+  <div class="loading-screen" id="loading-screen">
+    <video src="https://github.com/Iris2323-cloud/portfolio-depo-2/raw/refs/heads/main/rendere.mp4" autoplay muted playsinline onerror="this.style.display='none'"></video>
+  </div>
+
+  <nav class="nav">
+    <button class="nav-name" data-goto="work">Iris Buljević</button>
+    <div class="nav-links">
+      <button data-goto="work" class="active">Work</button>
+      <button data-goto="archive">Photo Archive</button>
+      <button data-goto="about">About</button>
+      <button data-goto="contact">Contact</button>
+    </div>
+    <button class="nav-toggle" aria-label="Open menu">Menu</button>
+  </nav>
+
+  <!-- ============ WORK VIEW ============ -->
+  <main class="view-stack">
+  <section id="view-work" class="view active">
+    <header class="hero">
+      <div class="hero-tags">
+        <span>Branding</span>
+        <span>Typography</span>
+        <span>Photography</span>
+        <span>UI/UX</span>
+        <span>Layout</span>
+        <span>Illustration</span>
+        <span>Motion Design</span>
+      </div>
+      <h1 class="hero-heading"></h1>
+    </header>
+
+    <section class="grid-section">
+      <div class="project-grid">
+        <!-- 12 interactive tiles, 3 columns x 4 rows -->
+        <button class="tile" data-goto="project" data-title="Saraj Square"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/saraj%20sqaure%20cover.png" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">SarajSquare</div><div class="tile-tag">Typeface</div></button>
+        <button class="tile" data-goto="project" data-title="Project Two"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/potec%20novi%20cover%20za%20babu%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">Kilimji Baba</div><div class="tile-tag">Visual Identity</div></button>
+        <button class="tile" data-goto="project" data-title="Project Three"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/da%20u%20prostoru.png" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">GALERIJA: DA</div><div class="tile-tag">Visual Identity</div></button>
+        <button class="tile" data-goto="project" data-title="Project Four"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ezgif.com-gif-maker%20(1).gif" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">Murakami Series</div><div class="tile-tag">Book Covers</div></button>
+        <button class="tile" data-goto="project" data-title="Project Six"><div class="tile-image"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span>Image placeholder</span></div><div class="tile-title">FitMap</div><div class="tile-tag">UI Design</div></button>
+        <button class="tile" data-goto="project" data-title="Project Seven"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/pecha%20kucha%201.png" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">Pecha Kucha Sarajevo</div><div class="tile-tag">Visual Identity</div></button>
+        <button class="tile" data-goto="project" data-title="Project Eight"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%20cover%20new.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">HOME</div><div class="tile-tag">Interaction Design</div></button>
+        <button class="tile" data-goto="project" data-title="Project Nine"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ilustracija%20cover.png" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">Childerns Illustrations</div><div class="tile-tag">Ilustration</div></button>
+        <button class="tile" data-goto="project" data-title="Project Ten"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/WhatsApp%20Image%202025-11-16%20at%2019.38.06_3748cbdb.jpg" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">Digital Reliquary</div><div class="tile-tag">Virtual Gallery Space</div></button>
+        <button class="tile" data-goto="project" data-title="Project Eleven"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ezgif.com-gif-maker%20(2).gif?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">On Aesthetics</div><div class="tile-tag">Publication</div></button>
+        <button class="tile" data-goto="project" data-title="Project Twelve"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/DSC03972%20(1).png" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div><div class="tile-title">Wooden Chess Sets</div><div class="tile-tag">Product Design and Photography</div></button>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ ARCHIVE VIEW ============ -->
+  <section id="view-archive" class="view">
+    <h1 class="page-title">Photo Archive</h1>
+    <section class="grid-section">
+      <div class="project-grid">
+        <!-- Same grid, but static (non-interactive), image-only, horizontal ratio -->
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC04886.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC04881.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC00456.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC00466.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/_DSC0182.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC00507.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+         <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC05451%20smol.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Pijeca</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/image00013.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image Pijaca</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ume%C4%91%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>U medđuvremenur</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ume%C4%91%201.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Umeđuvremenu</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/image000134.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Punk</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/image000135.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Punk</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC02709.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC02787.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/stecci%201.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+        <div class="tile static"><div class="tile-image"><img loading="lazy" decoding="async" src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/stecci%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image placeholder</span></div></div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ PROJECT DETAIL VIEW ============ -->
+  <section id="view-project" class="view">
+      <div class="project-content" data-project="Saraj Square">
+    <header class="hero">
+      <h1>Saraj Square</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Sarajevo</span>
+        <span class="dot"></span>
+        <span>Bosnia and Herzegovina</span>
+      </div>
+      <h2>An experimental typeface drawn from Sarajevo's architecture.</h2>
+      <p>Saraj Square was developed for the exhibition "Eksperimentala" in Sarajevo. The project reimagines how we read type in relation to city space, taking its letterforms directly from the architectural elements that shape the city's skyline and streets. Designed in collaboration with Ibro Karagić.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Type design</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">FontLab, Adobe Illustrator</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Colaborative w/ Ibro Karagić</div></div>
+    </section>
+
+    <section class="gallery">
+
+      <div class="media-block media-hero-wide media-wide-solo"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/saraj%20square%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 2480×1145</span></div>
+
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/a.1.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/S1.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/U.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+      <div class="media-row">
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/font%20line%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/font%20line%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      </div>
+
+     
+       <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/saraj%20square%20pattern%20final.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/saraj%20square%20fin%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      
+
+
+      <div class="project-link-end"><button type="button" class="request-toggle" id="font-request-toggle" aria-expanded="false" aria-controls="font-request-panel">Request the font</button></div>
+      <div class="font-request-panel" id="font-request-panel" hidden>
+        <p class="font-request-intro">The font is available on request. Leave your details and what you'd like to use it for.</p>
+        <form id="font-request-form" style="display:flex; flex-direction:column; gap:20px;">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
+          <div class="field"><label for="font-name">Name</label><input id="font-name" name="name" type="text" autocomplete="name" required></div>
+          <div class="field"><label for="font-email">Email</label><input id="font-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="font-use">What will you use it for?</label><textarea id="font-use" name="use" rows="3" required></textarea></div>
+          <button type="submit">Send request</button>
+          <p id="font-request-status" role="status" aria-live="polite" style="font-size:14px; line-height:1.5; min-height:1.5em;"></p>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Two" hidden>
+    <header class="hero">
+      <h1>Kilimji Baba</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Konya</span>
+        <span class="dot"></span>
+        <span>Turkey</span>
+      </div>
+      <h2>Visual identity for traditional Turkish carpet shop in Konya, Turkey.</h2>
+      <p>The shop's visual identity lets the handmade work speak for itself, highlighting the fine detail and generational tradition of the craft. The system designed includes the logo, business cards, price tags, promotional material, and billboards.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Visual Identity</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Adobe Illustrator and Photoshop</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/kilimji%20baba%20porodicna%20slike%203.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/kilim%20baba%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/kilimji%20baba%20porodicna%20slike%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+      <div class="media-row">
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/kilim%20lable.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/vizit%20karta%20%20baba.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      </div>
+
+      <div class="media-block media-wide media-wide-solo"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/kilim%20baba%20reklama%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Three" hidden>
+    <header class="hero">
+      <h1>GALERIJA: DA</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Sarajevo</span>
+        <span class="dot"></span>
+        <span>Bosnia and Herzegovina</span>
+      </div>
+      <h2>Visual identity and art direction for a modern art gallery. </h2>
+      <p>For GALERIJA: DA the art direction concept and visual identity material was created as a free space, using a flexible system that can adapt to each exhibition, event or promotional material while staying strongly recognizable.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Visual Identity</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Adobe Illustrator, Photoshop <br>and Blender 4.5</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+
+      <div class="media-block media-wide media-wide-solo"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/Znak%20mock%20up.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+
+
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/galerija%20da%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+       
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Four" hidden>
+    <header class="hero">
+      <h1>Murakami Series</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Sarajevo</span>
+        <span class="dot"></span>
+        <span>Book Covers</span>
+      </div>
+      <h2>A concept redesign of Haruki Murakami novels, inspired by woodblock prints.</h2>
+      <p>A concept redesign of three Murakami books: Kafka on the Shore, The Elephant Vanishes, and Men Without Women. Inspired by Japanese woodblock prints and a clean visual aesthetic, the covers began as analogue prints that were then digitalized and developed into the final designs. Each of the prints serves as an element of the patterns created for the backing of the books.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Graphic Design</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Linocut, Photoshop and InDesign</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/c4c6f254840cee399022dd6591038a929c0ab0a3/Murakami%20cover%203.png" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/11d3fa8212838833dbab0e1081e6358b421b9762/Muarkami%20cover%201.png" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/cb08ebba7b34f0e7b687240091edc17e8e0d08f5/Murakami%20cover%202.png" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+<div class="media-block media-wide"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/04c60175ed795f3b2be05f831cb4c1017be85e08/murakami%20mockup%202.png" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+    
+  <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/4dbce0180dc7a99ab3f3c853d410bea28dad47a8/1.png" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ezgif.com-gif-maker%20(1).gif?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/762e905212b5a78fa362e7f42ce725693242db54/2.png" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Six" hidden>
+    <header class="hero">
+      <h1>FitMap</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Sarajevo</span>
+        <span class="dot"></span>
+        <span>Bosnia and Herzegovina</span>
+      </div>
+      <h2>A clean, intuitive app structure for every kind of fitness need.</h2>
+      <p>FitMap is a fitness app concept designed around one problem: workout, tracking and planning tools are usually scattered across several apps. It brings them into one clear structure that works for beginners and regular trainers alike. The focus throughout was on simple navigation and a clean interface.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">UI Design</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Figma, Adobe Illustrator</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+      <div class="media-block media-full"><video src="https://github.com/Iris2323-cloud/portfolio-depo-2/raw/refs/heads/main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com)%20(6).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span>Video — 16:9</span></div>
+      <br>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/fitmap%20portrait.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Seven" hidden>
+    <header class="hero">
+      <h1>Pecha Kucha Sarajevo</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Sarajevo</span>
+        <span class="dot"></span>
+        <span>Bosnia and Herzegovina</span>
+      </div>
+      <h2>A visual identity for a fast-paced event for young, upcoming artists.</h2>
+      <p>This identity was proposed for Pecha Kucha Sarajevo 2025. The concept comes from two things: the very short presentation time each artist gets, and their "young flame" status in the art world. Matches became the central image, a small flame that burns quickly and brightly. The visuals use bold, bright colors and a matchbox character derived from the original Pecha Kucha logo, giving the event an energetic, youthful feel.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Visual Identity</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Adobe Illustrator and Photoshop</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+
+      <div class="media-block media-wide media-wide-solo"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/shirt%20mockup%20horizontal%20final.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/PK%20FLAYER%20new.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/full%20poster%20pk.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/pk%20akreditacija.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+      <div class="media-row">
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/pk%20instagram%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/pk%20instagram%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      </div>
+
+    
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Eight" hidden>
+    <header class="hero">
+      <h1>HOME</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Lisbon</span>
+        <span class="dot"></span>
+        <span>Portugal</span>
+      </div>
+      <h2>A space that meets your exact needs.</h2>
+      <p>HOME is an interactive space designed for slowing down and looking inward. Shaped around one person, the room adjusts its light, temperature and atmosphere to what they need in the moment, creating a calm that is entirely theirs. The design focus was the interaction itself: how the room speaks, listens and changes to hold that space.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Interaction Design</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">EDIT: tools used</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Collaborative w/ Ana Mota <br> and Filipe Silva</div></div>
+    </section>
+
+    <section class="gallery">
+      <div class="media-block media-ultrawide"><video src="https://github.com/Iris2323-cloud/portfolio-depo-2/raw/refs/heads/main/03838d62-2e2c-408b-8a6e-ddec788452cf%20(online-video-cutter.com)%20(1).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span>Video — 2560×1080</span></div>
+
+      
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%202%20copy.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%203.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+      <div class="media-block media-ultrawide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%20pr%202.2.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 2560×1080</span></div>
+
+      <div class="media-block media-ultrawide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%20pr%204.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 2560×1080</span></div>
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/skica%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/skica%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/skica%203.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+
+
+      <div class="project-link-end"><a href="https://www.figma.com/proto/jMGAMnq1Ht1DPgbEbUaehH/Home---Case-Study?node-id=19-203&starting-point-node-id=19%3A203" target="_blank" rel="noopener">View full case study</a></div>
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Nine" hidden>
+    <header class="hero">
+      <h1>Childerns Illustrations</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Sarajevo</span>
+        <span class="dot"></span>
+        <span>Bosnia and Herzegovina</span>
+      </div>
+      <h2>Illustrations built around shape recognition and comprehension.</h2>
+      <p>This project shows a selection of illustrations for children's stories, built from simple shapes and kept deliberately uncluttered, so young readers can take in each scene easily and intuitively. The first two illustrations comes from old Bulgarian tales. While the ones below follow two characters collecting flowers. Through their journey children learn to recognize different plant species and their shapes.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Illustaration</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Adobe Photoshop</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+
+<div class="media-block media-wide media-wide-solo"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/eb454f6124d08c48550ba905590d45fa6a472124/ilust%20mockup.png" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+  <div class="media-block media-wide"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/33b39a73448bc0bc91b478d5d3e2a27184f843c6/patkice.png" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+<br>
+<br>
+    <div class="media-block media-wide media-wide-solo"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/977a84f97a06cf4b637f32cf67c5785522938d03/zmajevi.png" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+  <div class="media-block media-wide"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/414511e5827ff7451110d96e9d6c2e60dfb28d6d/zmajevi%202.png" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div> 
+<br>
+<br>
+      <div class="media-row">
+        <div class="media-block media-wide"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/1a61749fa8312bfa49207372fda8ab90c871dea4/cikci%20horiz%20%202.png" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        <div class="media-block media-wide"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/5cb5efd387247f5cc37e1c6016c822d7912d9bd7/cikci%20horiz%201.png" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      </div>
+
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/cikci%20mockup%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ilustracija%20cover.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/cikci%20mockup%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Ten" hidden>
+    <header class="hero">
+      <h1>Digital Reliquary</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Lisbon</span>
+        <span class="dot"></span>
+        <span>Portugal</span>
+      </div>
+      <h2>A virtual museum of human reliques.</h2>
+      <p>Digital Reliquary is a virtual museum made of human scans, raising questions about our presence and existence in digital space. In the demo space, interaction with the reliques surround the viewer with its pieces, while a voice engulfs the gallery space telling us the history of the human species.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Digital Art and Spatial Design</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Blender 4.5, Godot, Revo Scan 5  </div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+      <div class="media-block media-full"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/DR%20video%20(2).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span>Video — 16:9</span></div>
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/reliqary%20portrait%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/reliqary%20portrait%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/reliqary%20portrait%203.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+      <div class="media-row">
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/Screenshot%202025-11-24%20192723.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/Screenshot%202025-12-16%20163845.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      </div>
+
+    
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Eleven" hidden>
+    <header class="hero">
+      <h1>On Aesthetics</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Lisbon</span>
+        <span class="dot"></span>
+        <span>Portugal</span>
+      </div>
+      <h2>How has our perception of aestetics changed with the development of tech?</h2>
+      <p>"On Aesthetics" is a publication paired with an archival website which poses questions about aesthetic reforms in the coming digital age. This is presented by comparing the aesthetic trends of early internet and digital development with the new age of Artificial Intelligence.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Reserch, Layout, Web Design</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Adobe InDesign, Visual Studio Code</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Single-handed</div></div>
+    </section>
+
+    <section class="gallery">
+      <div class="media-block media-full" style="aspect-ratio: 798 / 378;"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/On%20Aesthetics%20web.gif" alt="" onerror="this.style.display='none'"><span>GIF — 798×378</span></div>
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/on%20aesthetics%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/Free_Book_Mockup_3.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/on%20aesthetics%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+      <div class="media-row">
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/aes%201.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/aes%202.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      </div>
+
+
+      <div class="project-link-end"><a href="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/On%20Aesthetics.pdf?raw=true" target="_blank" rel="noopener">Read full publication</a></div>
+    </section>
+  </div>
+
+  <div class="project-content" data-project="Project Twelve" hidden>
+    <header class="hero">
+      <h1>Wooden Chess Sets</h1>
+    </header>
+
+    <section class="project-header">
+      <div class="project-meta-line">
+        <span>Lisbon</span> <span class="dot"></span>
+        <span> Portugal</span>
+      </div>
+      <h2>A modren reimagining of the classic wooden chess boards.</h2>
+      <p>The sets were created in collaboration with the sculpture Romeu Delmar who specialises in abstract wood sculpture. Each piece and board is designed and carved to evoke and strangthen the compositional beauty already existing in a game of chess.</p>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Branch.</div><div class="value">Product Design and Photography</div></div>
+      <div class="meta-item"><div class="label">Tools.</div><div class="value">Adobe Lightroom</div></div>
+      <div class="meta-item"><div class="label">Type.</div><div class="value">Collaborative w/ Romeu Delmar</div></div>
+    </section>
+
+    <section class="gallery">
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC05082.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/sah%203.png" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/sah%202.png" alt="" onerror="this.style.display='none'"><span>Image — portrait</span></div>
+      </div>
+
+     
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC03988.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      
+
+<div class="media-row">
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC05061.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+        <div class="media-block media-wide"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/DSC05101.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image — 1533×1026</span></div>
+      </div>
+
+    </section>
+  </div>
+
+<section class="more-projects">
+      <div class="label">more projects</div>
+      <div class="mini-carousel">
+        <div class="mini-project-grid">
+        <button class="mini-tile" data-goto="project" data-title="Saraj Square"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/saraj%20sqaure%20cover.png" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">Saraj Square</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Two"><div class="mini-tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/potec%20novi%20cover%20za%20babu%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">Kilimji Baba</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Three"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/da%20u%20prostoru.png" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">GALERIJA: DA</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Four"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ezgif.com-gif-maker%20(1).gif" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">Murakami Series</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Six"><div class="mini-tile-image"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span>FitMap</span></div><div class="mini-tile-title">FitMap</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Seven"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/pecha%20kucha%201.png" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">Pecha Kucha Sarajevo</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Eight"><div class="mini-tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%20cover%20new.png?raw=true" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">HOME</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Nine"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ilustracija%20cover.png" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">Short Story Illustration</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Ten"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/WhatsApp%20Image%202025-11-16%20at%2019.38.06_3748cbdb.jpg" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">Digital Reliquary</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Eleven"><div class="mini-tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ezgif.com-gif-maker%20(2).gif?raw=true" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">On Aestetics</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Twelve"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/DSC03972%20(1).png" alt="" onerror="this.style.display='none'"><span>Image</span></div><div class="mini-tile-title">Wooden Chess Sets</div></button>
+        </div>
+      </div>
+    </section>
+
+    <div class="prev-next">
+      <button data-goto="project" data-nav="prev" data-title="Project Twelve">previous</button>
+      <button data-goto="project" data-nav="next" data-title="Project Two">next</button>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT VIEW ============ -->
+  <section id="view-about" class="view">
+    <section class="about-intro">
+      <div class="about-portrait">
+        <img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ja%20portret.png?raw=true" alt="Portrait" onerror="this.style.display='none'">
+        <span>Portrait</span>
+      </div>
+      <div class="about-intro-text">
+        <h1>A bit about me<br>and how I work</h1>
+        <p>My work is multidisciplinary and often reaches across different fields of design and visual communication. I always aim to provide logical, clean and up to date work, no matter the task.</p>
+      </div>
+    </section>
+
+    <section class="meta-row">
+      <div class="meta-item"><div class="label">Based.</div><div class="value">Lisbon, Portugal</div></div>
+      <div class="meta-item"><div class="label">Focus.</div><div class="value">Visual Communication and UX</div></div>
+      <div class="meta-item"><div class="label">Currently.</div><div class="value">Taking some freelance work</div></div>
+    </section>
+
+    <section class="project-header about-cv">
+      <h2>Between design, research and photography.</h2>
+      <p>While working mainly in visual communication and UX, I have a strong passion for photography and investigative projects. I studied Visual Communication at the Academy of Fine Arts Sarajevo and have taken part in many international projects, widening my perspective both in my work and in my collaborative skills. I currently work as a freelancer and enjoy combining a variety of skills in a holistic approach to my work.<br><br></p>
+
+      <div class="project-link-end"><button type="button" class="request-toggle" id="cv-request-toggle" aria-expanded="false" aria-controls="cv-request-panel">Request my CV</button></div>
+      <div class="font-request-panel" id="cv-request-panel" hidden>
+        <p class="font-request-intro">My CV is available on request. Leave your details and I'll send it to you by email.</p>
+        <form id="cv-request-form" style="display:flex; flex-direction:column; gap:20px;">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
+          <div class="field"><label for="cv-name">Name</label><input id="cv-name" name="name" type="text" autocomplete="name" required></div>
+          <div class="field"><label for="cv-email">Email</label><input id="cv-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="cv-note">What is it for? (optional)</label><textarea id="cv-note" name="note" rows="3"></textarea></div>
+          <button type="submit">Send request</button>
+          <p id="cv-request-status" role="status" aria-live="polite" style="font-size:14px; line-height:1.5; min-height:1.5em;"></p>
+        </form>
+      </div>
+    </section>
+
+  </section>
+
+  <!-- ============ CONTACT VIEW ============ -->
+  <section id="view-contact" class="view">
+    <header class="hero">
+      <h1>Let's work<br>together</h1>
+    </header>
+
+    <section class="project-header">
+      <p>Open to some new projects and collaborations. Reach out directly, or use the form below and I'll get back to you shortly.</p>
+    </section>
+
+    <section class="grid-section" style="padding-top: 0;">
+      <form id="contact-form" style="max-width: 560px; display: flex; flex-direction: column; gap: 20px;">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label for="contact-name" style="font-size:13px; color:var(--gray-block-text);">Name</label>
+          <input id="contact-name" name="name" type="text" autocomplete="name" required style="border:none; border-bottom:1px solid var(--line); padding:10px 0; font-family:var(--sans); font-size:16px; background:transparent; color:var(--ink);">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label for="contact-email" style="font-size:13px; color:var(--gray-block-text);">Email</label>
+          <input id="contact-email" name="email" type="email" autocomplete="email" required style="border:none; border-bottom:1px solid var(--line); padding:10px 0; font-family:var(--sans); font-size:16px; background:transparent; color:var(--ink);">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label for="contact-message" style="font-size:13px; color:var(--gray-block-text);">Message</label>
+          <textarea id="contact-message" name="message" rows="5" required style="border:none; border-bottom:1px solid var(--line); padding:10px 0; font-family:var(--sans); font-size:16px; background:transparent; color:var(--ink); resize:vertical;"></textarea>
+        </div>
+        <button type="submit" style="align-self:flex-start; padding:14px 28px; background:var(--ink); color:var(--paper); border:none; font-family:var(--sans); font-size:14px; cursor:pointer; margin-top:8px;">Send message</button>
+        <p id="contact-status" role="status" aria-live="polite" style="font-size:14px; line-height:1.5; min-height:1.5em; color:var(--ink);"></p>
+      </form>
+    </section>
+
+    <section class="project-header">
+      <div class="meta-item"><div class="label">Or write directly.</div><div class="value"><a href="mailto:iris.buljevic@gmail.com" style="text-decoration:underline;">iris.buljevic@gmail.com</a></div></div>
+    </section>
+  </section>
+  </main>
+
+  <!-- ============ FOOTER (shared) ============ -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-nav">
+        <button data-goto="work">Work</button>
+        <button data-goto="archive">Archive</button>
+        <button data-goto="about">About</button>
+        <button data-goto="contact">Contact</button>
+      </div>
+     
+      <div class="footer-contact">
+        <a href="mailto:iris.buljevic@gmail.com"><br><br>iris.buljevic@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Iris Buljević</span>
+      <span>iris.buljevic@gmail.com</span>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Loading screen ----
+    // Plays the intro video (slowed slightly) for up to 10 seconds, then fades out
+    // to reveal the landing page. Stays hidden (background only, no gray flash)
+    // until the video actually has a frame ready. Clicking skips it early.
+    (function () {
+      const loadingScreen = document.getElementById('loading-screen');
+      const video = loadingScreen ? loadingScreen.querySelector('video') : null;
+      if (!loadingScreen) return;
+
+      let finished = false;
+      let timerId = null;
+
+      function endLoading() {
+        if (finished) return;
+        finished = true;
+        if (timerId) clearTimeout(timerId);
+        loadingScreen.classList.add('fade-out');
+        document.body.classList.remove('loading');
+        setTimeout(() => loadingScreen.remove(), 900); // matches CSS fade duration
+      }
+
+      if (video) {
+        video.playbackRate = 0.75; // slow the video down a bit
+        video.addEventListener('loadeddata', () => video.classList.add('ready'));
+        video.addEventListener('canplay', () => video.classList.add('ready'));
+      }
+
+      // Click anywhere on the loading screen to skip straight to the landing page.
+      loadingScreen.addEventListener('click', endLoading);
+
+      timerId = setTimeout(endLoading, 6000);
+    })();
+
+    // ---- View switching ----
+    const views = document.querySelectorAll('.view');
+    const navButtons = document.querySelectorAll('.nav-links button');
+
+    // Always jump to the top instantly (no slow smooth-scroll across the new page).
+    function scrollTopNow() {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+
+    function showView(name) {
+      const nextEl = document.getElementById('view-' + name);
+      if (!nextEl) return;
+
+      navButtons.forEach(b => b.classList.toggle('active', b.dataset.goto === name));
+      const isProject = name === 'project';
+
+      // Exactly one view is active at any time; everything else is removed.
+      views.forEach(v => { if (v !== nextEl) v.classList.remove('active', 'slide-in'); });
+
+      // Restart the entrance animation (also when going project -> project).
+      nextEl.classList.remove('active', 'slide-in');
+      void nextEl.offsetWidth;
+      nextEl.classList.add('active');
+      if (isProject) nextEl.classList.add('slide-in');
+
+      scrollTopNow();
+      if (window.__carouselReset) window.__carouselReset();
+    }
+
+    // Ordered list of projects, used to figure out what "previous" and "next" mean,
+    // and to match each project's own content block (data-project attribute).
+    const PROJECT_ORDER = [
+      'Saraj Square', 'Project Two', 'Project Three', 'Project Four',
+      'Project Six', 'Project Seven', 'Project Eight',
+      'Project Nine', 'Project Ten', 'Project Eleven', 'Project Twelve'
+    ];
+    const prevBtn = document.querySelector('.prev-next button[data-nav="prev"]');
+    const nextBtn = document.querySelector('.prev-next button[data-nav="next"]');
+    const projectContents = document.querySelectorAll('.project-content');
+
+    function updatePrevNext(currentTitle) {
+      const idx = PROJECT_ORDER.indexOf(currentTitle);
+      if (idx === -1 || !prevBtn || !nextBtn) return;
+      prevBtn.dataset.title = PROJECT_ORDER[(idx - 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length];
+      nextBtn.dataset.title = PROJECT_ORDER[(idx + 1) % PROJECT_ORDER.length];
+    }
+
+    // Shows the content block matching this project (its own title, description,
+    // meta info and gallery) and hides all the others.
+    function showProjectContent(title) {
+      projectContents.forEach(el => {
+        el.hidden = el.dataset.project !== title;
+      });
+    }
+
+    // ---- Mini carousel (more projects) ----
+    // Duplicate the tiles once so the loop is seamless. This happens BEFORE the
+    // click handlers are attached below, so the copies are clickable too.
+    const miniCarousel = document.querySelector('.mini-carousel');
+    const miniTrack = document.querySelector('.mini-project-grid');
+    if (miniCarousel && miniTrack) {
+      Array.from(miniTrack.children).forEach(tile => {
+        const copy = tile.cloneNode(true);
+        copy.setAttribute('aria-hidden', 'true');
+        copy.tabIndex = -1;
+        miniTrack.appendChild(copy);
+      });
+    }
+
+    document.querySelectorAll('[data-goto]').forEach(el => {
+      el.addEventListener('click', () => {
+        if (el.dataset.goto === 'project' && el.dataset.title) {
+          showProjectContent(el.dataset.title);
+          updatePrevNext(el.dataset.title);
+        }
+        showView(el.dataset.goto);
+      });
+    });
+
+    // Set the correct starting state for whichever project is shown by default.
+    updatePrevNext('Saraj Square');
+
+    // ---- Carousel animation ----
+    // Driven by JavaScript instead of a CSS animation so it can never get stuck.
+    // It only pauses while a real mouse is moving over it; touch taps, keyboard
+    // focus and a parked cursor never freeze it, and every page change resets it.
+    if (miniCarousel && miniTrack) {
+      const SPEED = 40; // pixels per second
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let pos = 0;
+      let last = performance.now();
+      let mouseOver = false;
+
+      const loopWidth = () => {
+        const kids = miniTrack.children;
+        const half = kids.length / 2;
+        return kids[half].offsetLeft - kids[0].offsetLeft;
+      };
+
+      // Pause only while a mouse is actively moving over the carousel (so tiles are
+      // easy to aim at). A cursor that is just parked there does NOT freeze it.
+      let lastMove = 0;
+      const onMouse = e => {
+        if (e.pointerType === 'mouse') { mouseOver = true; lastMove = performance.now(); }
+      };
+      miniCarousel.addEventListener('pointerenter', onMouse);
+      miniCarousel.addEventListener('pointermove', onMouse);
+      miniCarousel.addEventListener('pointerleave', () => { mouseOver = false; });
+      window.__carouselReset = () => { mouseOver = false; };
+
+      function tick(now) {
+        const dt = Math.min(now - last, 100) / 1000;
+        last = now;
+        // offsetParent is null while the carousel's page is hidden
+        if (!reduceMotion && !(mouseOver && now - lastMove < 1200) && miniCarousel.offsetParent !== null) {
+          const w = loopWidth();
+          if (w > 0) {
+            pos = (pos + SPEED * dt) % w;
+            miniTrack.style.transform = 'translate3d(' + (-pos) + 'px,0,0)';
+          }
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ---- Mobile nav toggle ----
+    const toggle = document.querySelector('.nav-toggle');
+    const links = document.querySelector('.nav-links');
+    function setMenu(open) {
+      links.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.textContent = open ? 'Close' : 'Menu';
+    }
+    toggle?.addEventListener('click', e => {
+      e.stopPropagation();
+      setMenu(!links.classList.contains('open'));
+    });
+    // Close after choosing a page, when tapping anywhere else, on Escape,
+    // and when the window is widened back to desktop size.
+    links?.addEventListener('click', e => { if (e.target.closest('button')) setMenu(false); });
+    document.addEventListener('click', e => {
+      if (links.classList.contains('open') && !e.target.closest('.nav')) setMenu(false);
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+    document.querySelector('.nav-name')?.addEventListener('click', () => setMenu(false));
+    window.addEventListener('resize', () => { if (window.innerWidth > 640) setMenu(false); });
+    // ---- Contact + font request forms ----
+    // To receive messages straight in your inbox: create a free form at formspree.io,
+    // set it to deliver to your email, and paste its URL below, e.g.
+    //   const CONTACT_ENDPOINT = 'https://formspree.io/f/xbgdrqdn';
+    // While this is empty, the buttons open the visitor's email app with the
+    // message already written and addressed to you.
+    const CONTACT_ENDPOINT = 'https://formspree.io/f/xbgdrqdn';
+    const CONTACT_EMAIL = 'iris.buljevic@gmail.com';
+    if (!CONTACT_ENDPOINT) console.warn('Forms are not connected yet: set CONTACT_ENDPOINT so messages reach your inbox.');
+
+    // Returns 'sent' (delivered to your inbox) or 'mailto' (visitor's email app opened).
+    async function sendToOwner({ subject, name, email, message }) {
+      if (!CONTACT_ENDPOINT) {
+        const body = message + '\r\n\r\n— ' + name + ' (' + email + ')';
+        window.location.href = 'mailto:' + CONTACT_EMAIL +
+          '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+        return 'mailto';
+      }
+      const res = await fetch(CONTACT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, email, message, _subject: subject })
+      });
+      if (!res.ok) throw new Error('bad response');
+      return 'sent';
+    }
+
+    function wireForm(form, statusEl, buildMessage, sentText) {
+      if (!form) return;
+      const btn = form.querySelector('button[type="submit"]');
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        const f = new FormData(form);
+        if (f.get('_gotcha')) return; // spam bots fill this hidden field
+        const name = String(f.get('name') || '').trim();
+        const email = String(f.get('email') || '').trim();
+        const { subject, message } = buildMessage(f, name);
+        btn.disabled = true;
+        const label = btn.textContent;
+        btn.textContent = 'Sending…';
+        statusEl.textContent = '';
+        try {
+          const result = await sendToOwner({ subject, name, email, message });
+          if (result === 'sent') { form.reset(); statusEl.textContent = sentText; }
+          else { statusEl.textContent = 'Your email app should open with the message ready. If nothing happens, please write to ' + CONTACT_EMAIL + ' directly.'; }
+        } catch (err) {
+          statusEl.textContent = 'Sorry, something went wrong. Please email me directly at ' + CONTACT_EMAIL + '.';
+        } finally {
+          btn.disabled = false;
+          btn.textContent = label;
+        }
+      });
+    }
+
+    wireForm(
+      document.getElementById('contact-form'),
+      document.getElementById('contact-status'),
+      (f, name) => ({ subject: 'Portfolio message from ' + name, message: String(f.get('message') || '').trim() }),
+      'Thank you, your message has been sent. I will get back to you soon.'
+    );
+
+    wireForm(
+      document.getElementById('font-request-form'),
+      document.getElementById('font-request-status'),
+      (f, name) => ({
+        subject: 'Font request from ' + name,
+        message: 'Font request (Saraj Square)\r\n\r\nIntended use:\r\n' + String(f.get('use') || '').trim()
+      }),
+      'Thank you, your request has been sent. I will email you the font soon.'
+    );
+
+    // Show / hide the request form under the button
+    const fontToggle = document.getElementById('font-request-toggle');
+    const fontPanel = document.getElementById('font-request-panel');
+    fontToggle?.addEventListener('click', () => {
+      const open = fontPanel.hidden;
+      fontPanel.hidden = !open;
+      fontToggle.setAttribute('aria-expanded', String(open));
+    });
+
+    wireForm(
+      document.getElementById('cv-request-form'),
+      document.getElementById('cv-request-status'),
+      (f, name) => {
+        const note = String(f.get('note') || '').trim();
+        return {
+          subject: 'CV request from ' + name,
+          message: 'CV request' + (note ? '\r\n\r\nWhat it is for:\r\n' + note : '')
+        };
+      },
+      'Thank you, your request has been sent. I will email you my CV soon.'
+    );
+
+    const cvToggle = document.getElementById('cv-request-toggle');
+    const cvPanel = document.getElementById('cv-request-panel');
+    cvToggle?.addEventListener('click', () => {
+      const open = cvPanel.hidden;
+      cvPanel.hidden = !open;
+      cvToggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+
+</body>
+</html>
