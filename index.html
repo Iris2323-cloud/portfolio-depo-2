@@ -784,11 +784,8 @@
   }
 </style>
 </head>
-<body class="loading">
+<body>
 
-  <div class="loading-screen" id="loading-screen">
-    <video src="https://github.com/Iris2323-cloud/portfolio-depo-2/raw/refs/heads/main/rendere.mp4" autoplay muted playsinline onerror="this.style.display='none'"></video>
-  </div>
 
   <nav class="nav">
     <button class="nav-name" data-goto="work">Iris Buljević</button>
@@ -1433,38 +1430,6 @@
   </footer>
 
   <script>
-    // ---- Loading screen ----
-    // Plays the intro video (slowed slightly) for up to 10 seconds, then fades out
-    // to reveal the landing page. Stays hidden (background only, no gray flash)
-    // until the video actually has a frame ready. Clicking skips it early.
-    (function () {
-      const loadingScreen = document.getElementById('loading-screen');
-      const video = loadingScreen ? loadingScreen.querySelector('video') : null;
-      if (!loadingScreen) return;
-
-      let finished = false;
-      let timerId = null;
-
-      function endLoading() {
-        if (finished) return;
-        finished = true;
-        if (timerId) clearTimeout(timerId);
-        loadingScreen.classList.add('fade-out');
-        document.body.classList.remove('loading');
-        setTimeout(() => loadingScreen.remove(), 900); // matches CSS fade duration
-      }
-
-      if (video) {
-        video.playbackRate = 0.75; // slow the video down a bit
-        video.addEventListener('loadeddata', () => video.classList.add('ready'));
-        video.addEventListener('canplay', () => video.classList.add('ready'));
-      }
-
-      // Click anywhere on the loading screen to skip straight to the landing page.
-      loadingScreen.addEventListener('click', endLoading);
-
-      timerId = setTimeout(endLoading, 6000);
-    })();
 
     // ---- View switching ----
     const views = document.querySelectorAll('.view');
