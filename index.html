@@ -32,7 +32,7 @@
   }
 
   a { color: inherit; text-decoration: none; }
-  button { font: inherit; }
+  button { font: inherit; color: inherit; -webkit-appearance: none; appearance: none; -webkit-tap-highlight-color: transparent; }
 
   img, video { display: block; max-width: 100%; }
 
@@ -130,6 +130,7 @@
     display: none;
     background: none;
     border: none;
+    color: var(--ink);
     font-family: var(--sans);
     font-size: 14px;
     cursor: pointer;
@@ -1520,8 +1521,8 @@
     // It only pauses while a real mouse is moving over it; touch taps, keyboard
     // focus and a parked cursor never freeze it, and every page change resets it.
     if (miniCarousel && miniTrack) {
-      const SPEED = 40; // pixels per second
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const SPEED = reduceMotion ? 18 : 40; // pixels per second (gentler if Reduce Motion is on)
       let pos = 0;
       let last = performance.now();
       let mouseOver = false;
@@ -1547,7 +1548,7 @@
         const dt = Math.min(now - last, 100) / 1000;
         last = now;
         // offsetParent is null while the carousel's page is hidden
-        if (!reduceMotion && !(mouseOver && now - lastMove < 1200) && miniCarousel.offsetParent !== null) {
+        if (!(mouseOver && now - lastMove < 1200) && miniCarousel.offsetParent !== null) {
           const w = loopWidth();
           if (w > 0) {
             pos = (pos + SPEED * dt) % w;
