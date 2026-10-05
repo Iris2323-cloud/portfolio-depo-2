@@ -599,8 +599,6 @@
     touch-action: pan-y;
     width: calc(100% + 2 * var(--gutter));
     margin-left: calc(-1 * var(--gutter));
-    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
-    mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
   }
 
   .mini-project-grid {
@@ -610,6 +608,9 @@
     padding-left: var(--gutter);
     padding-right: var(--gutter);
     will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translate3d(0,0,0);
   }
 
   .mini-tile {
@@ -1052,9 +1053,9 @@
     </section>
 
     <section class="gallery">
-      <div class="media-block media-full"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/fitmap-project.mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span></span></div>
+      <div class="media-block media-full"><video src="https://github.com/Iris2323-cloud/portfolio-depo-2/raw/refs/heads/main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com)%20(6).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span></span></div>
       <br>
-        <div class="media-block media-portrait"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/fitmap%20portrait%20(1).png" alt="" onerror="this.style.display='none'"><span></span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/fitmap%20portrait.png?raw=true" alt="" onerror="this.style.display='none'"><span></span></div>
         
     </section>
   </div>
@@ -1552,7 +1553,9 @@
           const w = loopWidth();
           if (w > 0) {
             pos = (pos + SPEED * dt) % w;
-            miniTrack.style.transform = 'translate3d(' + (-pos) + 'px,0,0)';
+            const tf = 'translate3d(' + (-pos) + 'px,0,0)';
+            miniTrack.style.webkitTransform = tf;
+            miniTrack.style.transform = tf;
           }
         }
         requestAnimationFrame(tick);
