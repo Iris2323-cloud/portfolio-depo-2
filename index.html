@@ -72,6 +72,28 @@
     pointer-events: none;
   }
 
+  .loading-words {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    transition: opacity 0.7s ease;
+  }
+
+  .loading-words.fade-out { opacity: 0; }
+
+  .loading-words span {
+    font-family: var(--sans);
+    font-size: clamp(14px, 1.6vw, 17px);
+    letter-spacing: 0.02em;
+    color: var(--gray-block-text);
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+
+  .loading-words span.show { opacity: 1; }
+
   /* ---------- NAV ---------- */
   .nav {
     display: flex;
@@ -786,7 +808,19 @@
   }
 </style>
 </head>
-<body>
+<body class="loading">
+
+  <div class="loading-screen" id="loading-screen" aria-hidden="true">
+    <div class="loading-words" id="loading-words">
+      <span>Branding</span>
+      <span>Typography</span>
+      <span>Photography</span>
+      <span>UI/UX</span>
+      <span>Layout</span>
+      <span>Illustration</span>
+      <span>Motion Design</span>
+    </div>
+  </div>
 
 
   <nav class="nav">
@@ -804,15 +838,6 @@
   <main class="view-stack">
   <section id="view-work" class="view active">
     <header class="hero">
-      <div class="hero-tags">
-        <span>Branding</span>
-        <span>Typography</span>
-        <span>Photography</span>
-        <span>UI/UX</span>
-        <span>Layout</span>
-        <span>Illustration</span>
-        <span>Motion Design</span>
-      </div>
       <h1 class="hero-heading"></h1>
     </header>
 
@@ -820,12 +845,12 @@
       <div class="project-grid">
         <!-- 12 interactive tiles, 3 columns x 4 rows -->
         <button class="tile" data-goto="project" data-title="Saraj Square"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/saraj%20sqaure%20cover.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">SarajSquare</div><div class="tile-tag">Typeface</div></button>
-        <button class="tile" data-goto="project" data-title="Project Two"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/potec%20novi%20cover%20za%20babu%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">Kilimji Baba</div><div class="tile-tag">Visual Identity</div></button>
+        <button class="tile" data-goto="project" data-title="Project Six"><div class="tile-image"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span></span></div><div class="tile-title">FitMap</div><div class="tile-tag">UI Design</div></button>
         <button class="tile" data-goto="project" data-title="Project Three"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/da%20u%20prostoru.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">GALERIJA: DA</div><div class="tile-tag">Visual Identity</div></button>
         <button class="tile" data-goto="project" data-title="Project Four"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ezgif.com-gif-maker%20(1).gif" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">Murakami Series</div><div class="tile-tag">Book Covers</div></button>
-        <button class="tile" data-goto="project" data-title="Project Six"><div class="tile-image"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span></span></div><div class="tile-title">FitMap</div><div class="tile-tag">UI Design</div></button>
+        <button class="tile" data-goto="project" data-title="Project Two"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/potec%20novi%20cover%20za%20babu%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">Kilimji Baba</div><div class="tile-tag">Visual Identity</div></button>
         <button class="tile" data-goto="project" data-title="Project Seven"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/pecha%20kucha%201.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">Pecha Kucha Sarajevo</div><div class="tile-tag">Visual Identity</div></button>
-        <button class="tile" data-goto="project" data-title="Project Eight"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%20cover%20new%20(1)%20(1).png?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">HOME</div><div class="tile-tag">Interaction Design</div></button>
+        <button class="tile" data-goto="project" data-title="Project Eight"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%20cover%20new.png?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">HOME</div><div class="tile-tag">Interaction Design</div></button>
         <button class="tile" data-goto="project" data-title="Project Nine"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ilustracija%20cover.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">Childerns Illustrations</div><div class="tile-tag">Ilustration</div></button>
         <button class="tile" data-goto="project" data-title="Project Ten"><div class="tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/WhatsApp%20Image%202025-11-16%20at%2019.38.06_3748cbdb.jpg" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">Digital Reliquary</div><div class="tile-tag">Virtual Gallery Space</div></button>
         <button class="tile" data-goto="project" data-title="Project Eleven"><div class="tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/ezgif.com-gif-maker%20(2).gif?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="tile-title">On Aesthetics</div><div class="tile-tag">Publication</div></button>
@@ -1053,9 +1078,9 @@
     </section>
 
     <section class="gallery">
-      <div class="media-block media-full"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/fitmap-project.mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span></span></div>
+      <div class="media-block media-full"><video src="https://github.com/Iris2323-cloud/portfolio-depo-2/raw/refs/heads/main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com)%20(6).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span></span></div>
       <br>
-        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/fitmap%20portrait%20(1).png?raw=true" alt="" onerror="this.style.display='none'"><span></span></div>
+        <div class="media-block media-portrait"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/fitmap%20portrait.png?raw=true" alt="" onerror="this.style.display='none'"><span></span></div>
         
     </section>
   </div>
@@ -1316,10 +1341,10 @@
       <div class="mini-carousel">
         <div class="mini-project-grid">
         <button class="mini-tile" data-goto="project" data-title="Saraj Square"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/saraj%20sqaure%20cover.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">Saraj Square</div></button>
-        <button class="mini-tile" data-goto="project" data-title="Project Two"><div class="mini-tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/potec%20novi%20cover%20za%20babu%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">Kilimji Baba</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Six"><div class="mini-tile-image"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span>FitMap</span></div><div class="mini-tile-title">FitMap</div></button>
         <button class="mini-tile" data-goto="project" data-title="Project Three"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/da%20u%20prostoru.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">GALERIJA: DA</div></button>
         <button class="mini-tile" data-goto="project" data-title="Project Four"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ezgif.com-gif-maker%20(1).gif" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">Murakami Series</div></button>
-        <button class="mini-tile" data-goto="project" data-title="Project Six"><div class="mini-tile-image"><video src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com).mp4" autoplay muted loop playsinline onerror="this.style.display='none'"></video><span>FitMap</span></div><div class="mini-tile-title">FitMap</div></button>
+        <button class="mini-tile" data-goto="project" data-title="Project Two"><div class="mini-tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/potec%20novi%20cover%20za%20babu%202.jpg?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">Kilimji Baba</div></button>
         <button class="mini-tile" data-goto="project" data-title="Project Seven"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/pecha%20kucha%201.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">Pecha Kucha Sarajevo</div></button>
         <button class="mini-tile" data-goto="project" data-title="Project Eight"><div class="mini-tile-image"><img src="https://github.com/Iris2323-cloud/portfolio-depo-2/blob/main/home%20cover%20new.png?raw=true" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">HOME</div></button>
         <button class="mini-tile" data-goto="project" data-title="Project Nine"><div class="mini-tile-image"><img src="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/refs/heads/main/ilustracija%20cover.png" alt="" onerror="this.style.display='none'"><span></span></div><div class="mini-tile-title">Short Story Illustration</div></button>
@@ -1332,7 +1357,7 @@
 
     <div class="prev-next">
       <button data-goto="project" data-nav="prev" data-title="Project Twelve">previous</button>
-      <button data-goto="project" data-nav="next" data-title="Project Two">next</button>
+      <button data-goto="project" data-nav="next" data-title="Project Six">next</button>
     </div>
   </section>
 
@@ -1432,6 +1457,41 @@
   </footer>
 
   <script>
+    // ---- Loading screen ----
+    // Words fade in one by one (stacked), the list fades out, then the screen fades away.
+    (function () {
+      const screen = document.getElementById('loading-screen');
+      const list = document.getElementById('loading-words');
+      if (!screen || !list) { document.body.classList.remove('loading'); return; }
+      const words = Array.from(list.children);
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const STEP = reduce ? 150 : 350;   // delay between words
+      const HOLD = reduce ? 300 : 900;   // pause once all words are visible
+
+      let pageReady = document.readyState === 'complete';
+      window.addEventListener('load', () => { pageReady = true; });
+
+      function finish() {
+        list.classList.add('fade-out');
+        setTimeout(() => {
+          screen.classList.add('fade-out');
+          document.body.classList.remove('loading');
+          setTimeout(() => screen.remove(), 1000);
+        }, 700);
+      }
+
+      function waitForPage() {
+        // Wait for the page to finish loading, but never longer than 6 seconds in total.
+        const start = performance.now();
+        (function check() {
+          if (pageReady || performance.now() - start > 6000) finish();
+          else setTimeout(check, 100);
+        })();
+      }
+
+      words.forEach((w, i) => setTimeout(() => w.classList.add('show'), 200 + i * STEP));
+      setTimeout(waitForPage, 200 + words.length * STEP + HOLD);
+    })();
 
     // ---- View switching ----
     const views = document.querySelectorAll('.view');
@@ -1467,8 +1527,8 @@
     // Ordered list of projects, used to figure out what "previous" and "next" mean,
     // and to match each project's own content block (data-project attribute).
     const PROJECT_ORDER = [
-      'Saraj Square', 'Project Two', 'Project Three', 'Project Four',
-      'Project Six', 'Project Seven', 'Project Eight',
+      'Saraj Square', 'Project Six', 'Project Three', 'Project Four',
+      'Project Two', 'Project Seven', 'Project Eight',
       'Project Nine', 'Project Ten', 'Project Eleven', 'Project Twelve'
     ];
     const prevBtn = document.querySelector('.prev-next button[data-nav="prev"]');
