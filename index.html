@@ -90,7 +90,7 @@
     color: var(--gray-block-text);
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.9s ease, transform 0.9s ease;
   }
 
   .loading-words span.show { opacity: 1; transform: translateY(0); }
@@ -179,6 +179,13 @@
   /* Used specifically when opening a project, for a nicer "slide up" feel. */
   .view.active.slide-in {
     animation: fadein 0.3s ease backwards;
+  }
+
+  .video-tap {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(20, 20, 15, 0.18); border: none; cursor: pointer;
+    color: #fff; font-size: 44px; z-index: 2;
   }
 
   /* Project content: each piece pops in with a soft bounce, one after another.
@@ -985,19 +992,19 @@
     </section>
 
     <section class="gallery">
-
-      <div class="media-row-3">
-        <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilimji%20baba%20porodicna%20slike%203.jpg" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilimji%20baba%20porodicna%20slike%203.jpg" alt="" onerror="imgFail(this)"><span></span></div>
-        <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilim%20baba%201.png" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilim%20baba%201.png" alt="" onerror="imgFail(this)"><span></span></div>
-        <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilimji%20baba%20porodicna%20slike%202.png" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilimji%20baba%20porodicna%20slike%202.png" alt="" onerror="imgFail(this)"><span></span></div>
-      </div>
-
       <div class="media-row">
         <div class="media-block media-wide"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilim%20lable.jpg" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilim%20lable.jpg" alt="" onerror="imgFail(this)"><span></span></div>
         <div class="media-block media-wide"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/vizit%20karta%20%20baba.png" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/vizit%20karta%20%20baba.png" alt="" onerror="imgFail(this)"><span></span></div>
       </div>
 
       <div class="media-block media-wide media-wide-solo"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilim%20baba%20reklama%202.jpg" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilim%20baba%20reklama%202.jpg" alt="" onerror="imgFail(this)"><span></span></div>
+
+
+      <div class="media-row-3">
+        <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilimji%20baba%20porodicna%20slike%203.jpg" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilimji%20baba%20porodicna%20slike%203.jpg" alt="" onerror="imgFail(this)"><span></span></div>
+        <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilim%20baba%201.png" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilim%20baba%201.png" alt="" onerror="imgFail(this)"><span></span></div>
+        <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/kilimji%20baba%20porodicna%20slike%202.png" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/kilimji%20baba%20porodicna%20slike%202.png" alt="" onerror="imgFail(this)"><span></span></div>
+      </div>
     </section>
   </div>
 
@@ -1095,7 +1102,7 @@
     </section>
 
     <section class="gallery">
-      <div class="media-block media-full"><video data-src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com)%20(6).mp4" muted loop playsinline preload="none" onerror="this.style.display='none'"></video><span></span></div>
+      <div class="media-block media-full"><video data-src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/Screen%20Recording%20-%20Made%20with%20RecordCast%20(1)%20(online-video-cutter.com)%20(6).mp4" muted loop playsinline preload="none"></video><span></span></div>
       <br>
         <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/fitmap%20portrait.png" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/fitmap%20portrait.png" alt="" onerror="imgFail(this)"><span></span></div>
         
@@ -1164,7 +1171,7 @@
     </section>
 
     <section class="gallery">
-      <div class="media-block media-ultrawide"><video data-src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/03838d62-2e2c-408b-8a6e-ddec788452cf%20(online-video-cutter.com)%20(1).mp4" muted loop playsinline preload="none" onerror="this.style.display='none'"></video><span></span></div>
+      <div class="media-block media-ultrawide"><video data-src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/03838d62-2e2c-408b-8a6e-ddec788452cf%20(online-video-cutter.com)%20(1).mp4" muted loop playsinline preload="none"></video><span></span></div>
 
       
       <div class="media-row-3">
@@ -1256,7 +1263,7 @@
     </section>
 
     <section class="gallery">
-      <div class="media-block media-full"><video data-src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/DR%20video%20(2).mp4" muted loop playsinline preload="none" onerror="this.style.display='none'"></video><span></span></div>
+      <div class="media-block media-full"><video data-src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/DR%20video%20(2).mp4" muted loop playsinline preload="none"></video><span></span></div>
 
       <div class="media-row-3">
         <div class="media-block media-portrait"><img loading="lazy" decoding="async" data-fb="https://raw.githubusercontent.com/Iris2323-cloud/portfolio-depo-2/main/reliqary%20portrait%201.png" src="https://cdn.jsdelivr.net/gh/Iris2323-cloud/portfolio-depo-2@main/reliqary%20portrait%201.png" alt="" onerror="imgFail(this)"><span></span></div>
@@ -1474,6 +1481,10 @@
   </footer>
 
   <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => { const w = document.getElementById('view-work'); if (w) eagerLoad(w); }, 800);
+    });
+
     // ---- Image fallback: if the fast CDN link fails, try the original GitHub link once ----
     function imgFail(img) {
       const fb = img.dataset.fb;
@@ -1490,7 +1501,7 @@
       if (!screen || !list) { document.body.classList.remove('loading'); return; }
       const words = Array.from(list.children);
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const STEP = reduce ? 80 : 230;   // delay between words
+      const STEP = reduce ? 100 : 400;   // delay between words
       const HOLD = 0;                   // no static pause: fade out as soon as the last word appears
 
       const firstImgs = Array.from(document.querySelectorAll('#view-work .tile-image img')).slice(0, 4);
@@ -1533,6 +1544,14 @@
       document.body.scrollTop = 0;
     }
 
+    // Phones can be slow to start lazy-loaded images, so once a view or project is
+    // opened, all its images are told to load right away (never the hidden projects).
+    function eagerLoad(root) {
+      root.querySelectorAll('img[loading="lazy"]').forEach(img => {
+        if (!img.closest('.project-content[hidden]')) img.loading = 'eager';
+      });
+    }
+
     function showView(name) {
       const nextEl = document.getElementById('view-' + name);
       if (!nextEl) return;
@@ -1549,6 +1568,7 @@
       nextEl.classList.add('active');
       if (isProject) nextEl.classList.add('slide-in');
 
+      eagerLoad(nextEl);
       scrollTopNow();
       if (window.__carouselReset) window.__carouselReset();
     }
@@ -1590,23 +1610,70 @@
         });
       }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
       targets.forEach(t => fxObserver.observe(t));
+
+      // Safety net: anything on screen that the observer missed is revealed anyway.
+      const reveal = () => {
+        let i = 0;
+        el.querySelectorAll('.fx:not(.fx-in)').forEach(t => {
+          const r = t.getBoundingClientRect();
+          if (r.height > 0 && r.top < window.innerHeight && r.bottom > 0) {
+            t.style.setProperty('--d', Math.min(i++, 6) * 0.09 + 's');
+            t.classList.add('fx-in');
+          }
+        });
+      };
+      if (window.__fxReveal) {
+        window.removeEventListener('scroll', window.__fxReveal);
+        window.removeEventListener('resize', window.__fxReveal);
+      }
+      window.__fxReveal = reveal;
+      window.addEventListener('scroll', reveal, { passive: true });
+      window.addEventListener('resize', reveal);
+      setTimeout(reveal, 400);
+      setTimeout(reveal, 1500);
     }
 
-    // Shows the content block matching this project and hides all the others.
-    // Videos only download and play for the project that is actually open.
+    // Loads and plays a project video. Tries a few CDN hosts in turn, and if the
+    // phone blocks autoplay (e.g. Low Power Mode) shows a tap-to-play button.
+    function startVideo(v) {
+      v.muted = true;
+      v.setAttribute('playsinline', '');
+      const block = v.parentElement;
+      const addTap = () => {
+        if (block.querySelector('.video-tap')) return;
+        const b = document.createElement('button');
+        b.className = 'video-tap'; b.type = 'button'; b.setAttribute('aria-label', 'Play video'); b.textContent = '\u25B6';
+        b.addEventListener('click', () => { v.play().catch(() => {}); b.remove(); });
+        block.appendChild(b);
+      };
+      const tryPlay = () => { const p = v.play(); if (p && p.catch) p.catch(addTap); };
+      if (!v.dataset.started) {
+        v.dataset.started = '1';
+        const base = v.dataset.src;
+        const srcs = [base, base.replace('//cdn.', '//fastly.'), base.replace('//cdn.', '//gcore.')];
+        let i = 0;
+        const next = () => {
+          if (i >= srcs.length) { v.style.display = 'none'; return; }
+          v.src = srcs[i++]; v.load(); tryPlay();
+        };
+        v.addEventListener('error', next);
+        v.addEventListener('playing', () => { const t = block.querySelector('.video-tap'); if (t) t.remove(); });
+        next();
+      } else tryPlay();
+    }
+
     function showProjectContent(title) {
       projectContents.forEach(el => {
         const show = el.dataset.project === title;
         el.hidden = !show;
         el.querySelectorAll('video[data-src]').forEach(v => {
           if (show) {
-            if (!v.getAttribute('src')) v.src = v.dataset.src;
-            const p = v.play(); if (p && p.catch) p.catch(() => {});
+            startVideo(v);
           } else {
             v.pause();
           }
         });
-        if (show) animateProject(el);
+        if (show) { eagerLoad(el); animateProject(el); }
       });
     }
 
